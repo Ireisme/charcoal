@@ -2,12 +2,12 @@
   <div>
     <v-navigation-drawer v-model="drawer" fixed app>
       <v-list dense>
-        <v-list-tile @click.stop>
+        <v-list-tile @click.stop router :to="{name: 'site-list'}">
           <v-list-tile-action>
-            <v-icon>home</v-icon>
+            <v-icon>place</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Home</v-list-tile-title>
+            <v-list-tile-title>Sites</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
         <v-list-tile @click.stop>
@@ -41,10 +41,15 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import { GetSitesAction } from '../store/sites/get-sites.action'
 
 @Component
 export default class Home extends Vue {
   drawer: boolean = false;
+
+  created() {
+    this.$store.dispatch(new GetSitesAction());
+  }
 
   logout() {
     this.$auth.logOut();
