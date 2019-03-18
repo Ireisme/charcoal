@@ -1,7 +1,9 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import store from '../store/store'
+import { Guid } from "guid-typescript";
+import { Site } from './site';
 
-export class HelloService {
+export class SiteService {
   private baseUrl: string;
   private http: AxiosInstance;
 
@@ -17,12 +19,13 @@ export class HelloService {
     return request;
   }
 
-  public async getGreeting(): Promise<GreetingResponse> {
-    const response = await this.http.get<GreetingResponse>(`${this.baseUrl}/hello`);
+  public async getSites(): Promise<Site[]> {
+    const response = await this.http.get<Site[]>(`${this.baseUrl}/sites`);
     return response.data;
   }
-}
 
-export class GreetingResponse {
-  public Greeting: string = '';
+  public async addSite(site: Site) {
+    const response = await this.http.post<Site[]>(`${this.baseUrl}/sites`, { ID: site.ID.toString(), Name: site.Name, ImageURL: site.ImageURL });
+    return response.data;
+  }
 }
