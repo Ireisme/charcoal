@@ -19,6 +19,7 @@ func main() {
 	r.Use(CorsMiddleware{}.Create().Handler)
 
 	r.Mount("/hello", helloResource{}.Routes())
+	r.Mount("/sites", siteResource{}.Routes())
 
 	http.ListenAndServe(":3000", r)
 }
