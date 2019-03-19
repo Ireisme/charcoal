@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/ireisme/charcoal/sites"
 )
 
 func main() {
@@ -19,7 +20,7 @@ func main() {
 	r.Use(CorsMiddleware{}.Create().Handler)
 
 	r.Mount("/hello", helloResource{}.Routes())
-	r.Mount("/sites", siteResource{}.Routes())
+	r.Mount("/sites", sites.SiteResource{}.Routes())
 
 	http.ListenAndServe(":3000", r)
 }

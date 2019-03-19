@@ -1,8 +1,7 @@
-package main
+package sites
 
 import (
 	"github.com/google/uuid"
-	_ "github.com/lib/pq"
 )
 
 type Site struct {

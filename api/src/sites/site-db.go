@@ -1,10 +1,11 @@
-package main
+package sites
 
 import (
 	"log"
 
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
 type SiteDB struct{}

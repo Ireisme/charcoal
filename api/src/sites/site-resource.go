@@ -1,4 +1,4 @@
-package main
+package sites
 
 import (
 	"errors"
@@ -10,9 +10,9 @@ import (
 	"github.com/go-chi/render"
 )
 
-type siteResource struct{}
+type SiteResource struct{}
 
-func (rs siteResource) Routes() chi.Router {
+func (rs SiteResource) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Get("/", GetAll)
