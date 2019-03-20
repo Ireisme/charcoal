@@ -14,6 +14,7 @@ require (
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/lib/pq v1.0.0
 	github.com/smartystreets/goconvey v0.0.0-20190306220146-200a235640ff // indirect
+	github.com/stretchr/testify v1.3.0
 	golang.org/x/net v0.0.0-20190318221613-d196dffd7c2b // indirect
 	google.golang.org/appengine v1.4.0 // indirect
 )
