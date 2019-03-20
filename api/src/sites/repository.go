@@ -16,22 +16,19 @@ type SiteRepository interface {
 }
 
 type repository struct {
-	connectionString string
+	db sqlx.DB
 }
 
-func NewRepository(connection string) SiteRepository {
+func NewRepository(db sqlx.DB) SiteRepository {
 	return &repository{
-		connectionString: connection,
+		db: db,
 	}
 }
 
 func (r *repository) Find(id uuid.UUID) (*Site, error) {
-	db := connect(r.connectionString)
-	defer db.Close()
-
 	site := Site{}
 
-	if err := db.Get(&site, "SELECT * FROM charcoal.sites WHERE id=$1", id); err != nil {
+	if err := r.db.Get(&site, "SELECT * FROM charcoal.sites WHERE id=$1", id); err != nil {
 		log.Fatal(err)
 		return nil, err
 	}
@@ -40,12 +37,9 @@ func (r *repository) Find(id uuid.UUID) (*Site, error) {
 }
 
 func (r *repository) FindAll() ([]*Site, error) {
-	db := connect(r.connectionString)
-	defer db.Close()
-
 	var sites []*Site
 
-	if err := db.Select(&sites, "SELECT * FROM charcoal.sites"); err != nil {
+	if err := r.db.Select(&sites, "SELECT * FROM charcoal.sites"); err != nil {
 		log.Fatal(err)
 		return nil, err
 	}
@@ -54,10 +48,7 @@ func (r *repository) FindAll() ([]*Site, error) {
 }
 
 func (r *repository) Store(site *Site) error {
-	db := connect(r.connectionString)
-	defer db.Close()
-
-	if _, err := db.Exec("UPSERT INTO sites (id, name, imageUrl) VALUES ($1, $2, $3)", site.ID, site.Name, site.ImageURL); err != nil {
+	if _, err := r.db.Exec("UPSERT INTO sites (id, name, imageUrl) VALUES ($1, $2, $3)", site.ID, site.Name, site.ImageURL); err != nil {
 		log.Fatal(err)
 		return err
 	}
@@ -66,22 +57,10 @@ func (r *repository) Store(site *Site) error {
 }
 
 func (r *repository) Delete(id uuid.UUID) error {
-	db := connect(r.connectionString)
-	defer db.Close()
-
-	if _, err := db.Exec("DELETE FROM sites WHERE id=$1)", id); err != nil {
+	if _, err := r.db.Exec("DELETE FROM sites WHERE id=$1)", id); err != nil {
 		log.Fatal(err)
 		return err
 	}
 
 	return nil
-}
-
-func connect(connection string) *sqlx.DB {
-	db, err := sqlx.Open("postgres", connection)
-	if err != nil {
-		log.Fatal("error connecting to the database: ", err)
-	}
-
-	return db
 }
