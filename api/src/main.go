@@ -3,23 +3,17 @@ package main
 import (
 	"net/http"
 
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
 	"github.com/ireisme/charcoal/sites"
 )
 
 func main() {
-	r := chi.NewRouter()
+	connectionString := "postgresql://charcoaluser@localhost:26257/charcoal?sslmode=disable"
 
-	r.Use(middleware.RequestID)
-	r.Use(middleware.RealIP)
-	r.Use(middleware.Logger)
-	r.Use(middleware.Recoverer)
+	rp := sites.NewRepository(connectionString)
+	s := sites.NewService(rp)
+	rs := sites.NewResource(s)
 
-	r.Use(OauthMiddleware{}.Create().Handler)
-	r.Use(CorsMiddleware{}.Create().Handler)
-
-	r.Mount("/sites", sites.SiteResource{}.Routes())
+	r := NewHandler(rs)
 
 	http.ListenAndServe(":3000", r)
 }
