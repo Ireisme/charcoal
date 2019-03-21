@@ -34,7 +34,7 @@ func (r *MockRepository) Delete(id uuid.UUID) error {
 	return args.Error(0)
 }
 
-func TestFind(t *testing.T) {
+func TestFindToReturnSite(t *testing.T) {
 	id, _ := uuid.NewRandom()
 	expected := &Site{
 		ID: id,
@@ -51,7 +51,7 @@ func TestFind(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
-func TestFindAll(t *testing.T) {
+func TestFindAllToReturnSites(t *testing.T) {
 	expected := []*Site{&Site{}, &Site{}}
 
 	mockRepo := new(MockRepository)
@@ -65,7 +65,7 @@ func TestFindAll(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
-func TestStore(t *testing.T) {
+func TestStoreToReturnNewSite(t *testing.T) {
 	id, _ := uuid.NewRandom()
 	createSite := CreateSite{
 		ID:       id,
