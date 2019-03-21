@@ -24,6 +24,11 @@ func (r *MockRepository) FindAll() ([]*Site, error) {
 	return args.Get(0).([]*Site), args.Error(1)
 }
 
+func (r *MockRepository) FindByName(name string) (*Site, error) {
+	args := r.Called(name)
+	return args.Get(0).(*Site), args.Error(1)
+}
+
 func (r *MockRepository) Store(site *Site) error {
 	args := r.Called(site)
 	return args.Error(0)
@@ -89,4 +94,30 @@ func TestStoreToReturnNewSite(t *testing.T) {
 	assert.Equal(t, expected, actual)
 
 	mockRepo.AssertExpectations(t)
+}
+
+func TestStoreToErrorWhenSiteNameExists(t *testing.T) {
+	existingID, _ := uuid.NewRandom()
+	existingSite := &Site{
+		ID:       existingID,
+		Name:     "Test Name",
+		ImageURL: "http://fake.url.com",
+	}
+	newID, _ := uuid.NewRandom()
+	createSite := CreateSite{
+		ID:       newID,
+		Name:     existingSite.Name,
+		ImageURL: "http://different.url.com",
+	}
+
+	mockRepo := new(MockRepository)
+	mockRepo.On("FindByName", createSite.Name).Return(existingSite, nil)
+	mockRepo.On("Store", &Site{}).Return(nil)
+
+	sut := NewService(mockRepo)
+
+	actual, err := sut.Create(createSite)
+
+	assert.EqualError(t, err, "A site with the name 'Test Name' already exists")
+	assert.Nil(t, actual)
 }

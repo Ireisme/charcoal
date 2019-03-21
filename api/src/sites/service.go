@@ -1,6 +1,8 @@
 package sites
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 )
 
@@ -29,6 +31,12 @@ func (s *service) FindAll() ([]*Site, error) {
 }
 
 func (s *service) Create(cmd CreateSite) (*Site, error) {
+	if existingSite, err := s.repo.FindByName(cmd.Name); existingSite != nil {
+		return nil, fmt.Errorf("A site with the name '%s' already exists", cmd.Name)
+	} else if err != nil {
+		return nil, err
+	}
+
 	site := &Site{
 		ID:       cmd.ID,
 		Name:     cmd.Name,

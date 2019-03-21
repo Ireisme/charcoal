@@ -11,6 +11,7 @@ import (
 type SiteRepository interface {
 	Find(id uuid.UUID) (*Site, error)
 	FindAll() ([]*Site, error)
+	FindByName(name string) (*Site, error)
 	Store(site *Site) error
 	Delete(id uuid.UUID) error
 }
@@ -45,6 +46,17 @@ func (r *repository) FindAll() ([]*Site, error) {
 	}
 
 	return sites, nil
+}
+
+func (r *repository) FindByName(name string) (*Site, error) {
+	site := Site{}
+
+	if err := r.db.Get(&site, "SELECT * FROM charcoal.sites WHERE name=$1", name); err != nil {
+		log.Fatal(err)
+		return nil, err
+	}
+
+	return &site, nil
 }
 
 func (r *repository) Store(site *Site) error {
