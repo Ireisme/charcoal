@@ -1,33 +1,25 @@
-package sites
+package cockroach
 
 import (
 	"log"
 
 	"github.com/google/uuid"
+	"github.com/ireisme/charcoal/pkg/site"
 	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
 )
-
-type SiteRepository interface {
-	Find(id uuid.UUID) (*Site, error)
-	FindAll() ([]*Site, error)
-	FindByName(name string) (*Site, error)
-	Store(site *Site) error
-	Delete(id uuid.UUID) error
-}
 
 type repository struct {
 	db sqlx.DB
 }
 
-func NewRepository(db sqlx.DB) SiteRepository {
+func NewSiteRepository(db sqlx.DB) site.SiteRepository {
 	return &repository{
 		db: db,
 	}
 }
 
-func (r *repository) Find(id uuid.UUID) (*Site, error) {
-	site := Site{}
+func (r *repository) Find(id uuid.UUID) (*site.Site, error) {
+	site := site.Site{}
 
 	if err := r.db.Get(&site, "SELECT * FROM charcoal.sites WHERE id=$1", id); err != nil {
 		log.Fatal(err)
@@ -37,8 +29,8 @@ func (r *repository) Find(id uuid.UUID) (*Site, error) {
 	return &site, nil
 }
 
-func (r *repository) FindAll() ([]*Site, error) {
-	var sites []*Site
+func (r *repository) FindAll() ([]*site.Site, error) {
+	var sites []*site.Site
 
 	if err := r.db.Select(&sites, "SELECT * FROM charcoal.sites"); err != nil {
 		log.Fatal(err)
@@ -48,8 +40,8 @@ func (r *repository) FindAll() ([]*Site, error) {
 	return sites, nil
 }
 
-func (r *repository) FindByName(name string) (*Site, error) {
-	site := Site{}
+func (r *repository) FindByName(name string) (*site.Site, error) {
+	site := site.Site{}
 
 	if err := r.db.Get(&site, "SELECT * FROM charcoal.sites WHERE name=$1", name); err != nil {
 		log.Fatal(err)
@@ -59,7 +51,7 @@ func (r *repository) FindByName(name string) (*Site, error) {
 	return &site, nil
 }
 
-func (r *repository) Store(site *Site) error {
+func (r *repository) Store(site *site.Site) error {
 	if _, err := r.db.Exec("UPSERT INTO sites (id, name, imageUrl) VALUES ($1, $2, $3)", site.ID, site.Name, site.ImageURL); err != nil {
 		log.Fatal(err)
 		return err

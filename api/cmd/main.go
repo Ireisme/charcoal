@@ -4,7 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/ireisme/charcoal/sites"
+	"github.com/ireisme/charcoal/pkg/data/cockroach"
+	chttp "github.com/ireisme/charcoal/pkg/http"
+	"github.com/ireisme/charcoal/pkg/site"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
@@ -17,11 +19,11 @@ func main() {
 	}
 	defer db.Close()
 
-	rp := sites.NewRepository(*db)
-	s := sites.NewService(rp)
-	rs := sites.NewResource(s)
+	rp := cockroach.NewSiteRepository(*db)
+	s := site.NewService(rp)
+	rs := site.NewResource(s)
 
-	r := NewHandler(rs)
+	r := chttp.NewHandler(rs)
 
 	http.ListenAndServe(":3000", r)
 }

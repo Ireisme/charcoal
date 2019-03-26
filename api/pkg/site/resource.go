@@ -1,4 +1,4 @@
-package sites
+package site
 
 import (
 	"errors"
@@ -8,7 +8,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
-	chttp "github.com/ireisme/charcoal/http"
+	cerrors "github.com/ireisme/charcoal/pkg/errors"
 )
 
 type SiteResource interface {
@@ -41,7 +41,7 @@ func (rs *resource) Routes() chi.Router {
 func (rs *resource) getAll(w http.ResponseWriter, r *http.Request) {
 	sites, err := rs.service.FindAll()
 	if err != nil {
-		render.Render(w, r, chttp.ErrInternalServer(err))
+		render.Render(w, r, cerrors.ErrInternalServer(err))
 		return
 	}
 
@@ -52,12 +52,12 @@ func (rs *resource) get(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "siteID")
 	id, err := uuid.Parse(param)
 	if err != nil {
-		render.Render(w, r, chttp.ErrInvalidRequest(err))
+		render.Render(w, r, cerrors.ErrInvalidRequest(err))
 	}
 
 	site, err := rs.service.Find(id)
 	if err != nil {
-		render.Render(w, r, chttp.ErrInternalServer(err))
+		render.Render(w, r, cerrors.ErrInternalServer(err))
 		return
 	}
 
@@ -67,13 +67,13 @@ func (rs *resource) get(w http.ResponseWriter, r *http.Request) {
 func (rs *resource) create(w http.ResponseWriter, r *http.Request) {
 	request := &CreateSiteRequest{}
 	if err := render.Bind(r, request); err != nil {
-		render.Render(w, r, chttp.ErrInvalidRequest(err))
+		render.Render(w, r, cerrors.ErrInvalidRequest(err))
 		return
 	}
 
 	site, err := rs.service.Create(*request.CreateSite)
 	if err != nil {
-		render.Render(w, r, chttp.ErrInternalServer(err))
+		render.Render(w, r, cerrors.ErrInternalServer(err))
 		return
 	}
 
