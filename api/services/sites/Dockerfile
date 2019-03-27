@@ -5,7 +5,7 @@ RUN apk --update add \
 	git openssl \
 	&& rm /var/cache/apk/*
 
-WORKDIR /src
+WORKDIR /
 
 ADD . /
 

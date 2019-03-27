@@ -1,39 +1,40 @@
-package trench
+package domain
 
 import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/ireisme/charcoal/pkg/site"
 )
 
+//TrenchService for interacting with Trenches
 type TrenchService interface {
 	Find(id uuid.UUID) (*Trench, error)
 	FindBySite(siteID uuid.UUID) ([]*Trench, error)
 	Create(cmd CreateTrench) (*Trench, error)
 }
 
-type service struct {
+type trenchService struct {
 	trenchRepo TrenchRepository
-	siteRepo   site.SiteRepository
+	siteRepo   SiteRepository
 }
 
-func NewService(t TrenchRepository, s site.SiteRepository) TrenchService {
-	return &service{
+//NewTrenchService creates a new TrenchService with dependencies
+func NewTrenchService(t TrenchRepository, s SiteRepository) TrenchService {
+	return &trenchService{
 		trenchRepo: t,
 		siteRepo:   s,
 	}
 }
 
-func (s *service) Find(id uuid.UUID) (*Trench, error) {
+func (s *trenchService) Find(id uuid.UUID) (*Trench, error) {
 	return s.trenchRepo.Find(id)
 }
 
-func (s *service) FindBySite(siteID uuid.UUID) ([]*Trench, error) {
+func (s *trenchService) FindBySite(siteID uuid.UUID) ([]*Trench, error) {
 	return s.trenchRepo.FindBySite(siteID)
 }
 
-func (s *service) Create(cmd CreateTrench) (*Trench, error) {
+func (s *trenchService) Create(cmd CreateTrench) (*Trench, error) {
 	if existingSite, err := s.siteRepo.Find(cmd.SiteID); existingSite == nil {
 		return nil, fmt.Errorf("A site with the ID '%s' does not exist", cmd.SiteID)
 	} else if err != nil {
@@ -61,10 +62,4 @@ func (s *service) Create(cmd CreateTrench) (*Trench, error) {
 	}
 
 	return trench, nil
-}
-
-type CreateTrench struct {
-	ID     uuid.UUID
-	SiteID uuid.UUID
-	Name   string
 }

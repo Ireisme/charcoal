@@ -1,4 +1,4 @@
-package site
+package domain
 
 import (
 	"testing"
@@ -48,7 +48,7 @@ func TestFindToReturnSite(t *testing.T) {
 	mockRepo := new(MockRepository)
 	mockRepo.On("Find", id).Return(expected, nil)
 
-	sut := NewService(mockRepo)
+	sut := NewSiteService(mockRepo)
 
 	actual, err := sut.Find(id)
 
@@ -62,7 +62,7 @@ func TestFindAllToReturnSites(t *testing.T) {
 	mockRepo := new(MockRepository)
 	mockRepo.On("FindAll").Return(expected, nil)
 
-	sut := NewService(mockRepo)
+	sut := NewSiteService(mockRepo)
 
 	actual, err := sut.FindAll()
 
@@ -86,7 +86,7 @@ func TestStoreToReturnNewSite(t *testing.T) {
 	mockRepo := new(MockRepository)
 	mockRepo.On("Store", expected).Return(nil)
 
-	sut := NewService(mockRepo)
+	sut := NewSiteService(mockRepo)
 
 	actual, err := sut.Create(createSite)
 
@@ -114,7 +114,7 @@ func TestStoreToErrorWhenSiteNameExists(t *testing.T) {
 	mockRepo.On("FindByName", createSite.Name).Return(existingSite, nil)
 	mockRepo.On("Store", &Site{}).Return(nil)
 
-	sut := NewService(mockRepo)
+	sut := NewSiteService(mockRepo)
 
 	actual, err := sut.Create(createSite)
 
