@@ -1,4 +1,4 @@
-package domain
+package site_test
 
 import (
 	"testing"
@@ -6,49 +6,23 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/google/uuid"
-
-	"github.com/stretchr/testify/mock"
+	emock "github.com/ireisme/charcoal/pkg/events/mock"
+	dmock "github.com/ireisme/charcoal/services/sites/data/mock"
+	"github.com/ireisme/charcoal/services/sites/site"
 )
-
-type MockRepository struct {
-	mock.Mock
-}
-
-func (r *MockRepository) Find(id uuid.UUID) (*Site, error) {
-	args := r.Called(id)
-	return args.Get(0).(*Site), args.Error(1)
-}
-
-func (r *MockRepository) FindAll() ([]*Site, error) {
-	args := r.Called()
-	return args.Get(0).([]*Site), args.Error(1)
-}
-
-func (r *MockRepository) FindByName(name string) (*Site, error) {
-	args := r.Called(name)
-	return args.Get(0).(*Site), args.Error(1)
-}
-
-func (r *MockRepository) Store(site *Site) error {
-	args := r.Called(site)
-	return args.Error(0)
-}
-
-func (r *MockRepository) Delete(id uuid.UUID) error {
-	args := r.Called(id)
-	return args.Error(0)
-}
 
 func TestFindToReturnSite(t *testing.T) {
 	id, _ := uuid.NewRandom()
-	expected := &Site{
+	expected := &site.Site{
 		ID: id,
 	}
 
-	mockRepo := new(MockRepository)
+	mockRepo := new(dmock.MockServiceRepository)
 	mockRepo.On("Find", id).Return(expected, nil)
 
-	sut := NewSiteService(mockRepo)
+	mockSender := new(emock.MockSender)
+
+	sut := site.NewService(mockRepo, mockSender)
 
 	actual, err := sut.Find(id)
 
@@ -57,12 +31,14 @@ func TestFindToReturnSite(t *testing.T) {
 }
 
 func TestFindAllToReturnSites(t *testing.T) {
-	expected := []*Site{&Site{}, &Site{}}
+	expected := []*site.Site{&site.Site{}, &site.Site{}}
 
-	mockRepo := new(MockRepository)
+	mockRepo := new(dmock.MockServiceRepository)
 	mockRepo.On("FindAll").Return(expected, nil)
 
-	sut := NewSiteService(mockRepo)
+	mockSender := new(emock.MockSender)
+
+	sut := site.NewService(mockRepo, mockSender)
 
 	actual, err := sut.FindAll()
 
@@ -72,21 +48,31 @@ func TestFindAllToReturnSites(t *testing.T) {
 
 func TestStoreToReturnNewSite(t *testing.T) {
 	id, _ := uuid.NewRandom()
-	createSite := CreateSite{
+	createSite := site.CreateSite{
 		ID:       id,
 		Name:     "Test Name",
 		ImageURL: "http://fake.url.com",
 	}
-	expected := &Site{
-		ID:       id,
-		Name:     "Test Name",
-		ImageURL: "http://fake.url.com",
+	siteCreated := site.SiteCreated{
+		ID:       createSite.ID,
+		Name:     createSite.Name,
+		ImageURL: createSite.ImageURL,
 	}
 
-	mockRepo := new(MockRepository)
+	expected := &site.Site{
+		ID:       id,
+		Name:     createSite.Name,
+		ImageURL: createSite.ImageURL,
+	}
+
+	mockRepo := new(dmock.MockServiceRepository)
 	mockRepo.On("Store", expected).Return(nil)
+	mockRepo.On("FindByName", createSite.Name).Return(nil, nil)
 
-	sut := NewSiteService(mockRepo)
+	mockSender := new(emock.MockSender)
+	mockSender.On("Send", "SiteCreated", siteCreated).Return(nil)
+
+	sut := site.NewService(mockRepo, mockSender)
 
 	actual, err := sut.Create(createSite)
 
@@ -98,23 +84,25 @@ func TestStoreToReturnNewSite(t *testing.T) {
 
 func TestStoreToErrorWhenSiteNameExists(t *testing.T) {
 	existingID, _ := uuid.NewRandom()
-	existingSite := &Site{
+	existingSite := &site.Site{
 		ID:       existingID,
 		Name:     "Test Name",
 		ImageURL: "http://fake.url.com",
 	}
 	newID, _ := uuid.NewRandom()
-	createSite := CreateSite{
+	createSite := site.CreateSite{
 		ID:       newID,
 		Name:     existingSite.Name,
 		ImageURL: "http://different.url.com",
 	}
 
-	mockRepo := new(MockRepository)
+	mockRepo := new(dmock.MockServiceRepository)
 	mockRepo.On("FindByName", createSite.Name).Return(existingSite, nil)
-	mockRepo.On("Store", &Site{}).Return(nil)
+	mockRepo.On("Store", &site.Site{}).Return(nil)
 
-	sut := NewSiteService(mockRepo)
+	mockSender := new(emock.MockSender)
+
+	sut := site.NewService(mockRepo, mockSender)
 
 	actual, err := sut.Create(createSite)
 
