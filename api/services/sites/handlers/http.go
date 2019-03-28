@@ -11,7 +11,8 @@ import (
 	"github.com/go-chi/render"
 	cerrors "github.com/ireisme/charcoal/pkg/errors"
 	chttp "github.com/ireisme/charcoal/pkg/http"
-	"github.com/ireisme/charcoal/services/sites/domain"
+	"github.com/ireisme/charcoal/services/sites/site"
+	"github.com/ireisme/charcoal/services/sites/trench"
 )
 
 type HTTPHandler interface {
@@ -19,11 +20,11 @@ type HTTPHandler interface {
 }
 
 type httpHandler struct {
-	ss domain.SiteService
-	ts domain.TrenchService
+	ss site.Service
+	ts trench.Service
 }
 
-func NewHTTPHandler(ss domain.SiteService, ts domain.TrenchService) HTTPHandler {
+func NewHTTPHandler(ss site.Service, ts trench.Service) HTTPHandler {
 	return &httpHandler{
 		ss: ss,
 		ts: ts,
@@ -102,7 +103,7 @@ func (h *httpHandler) createSite(w http.ResponseWriter, r *http.Request) {
 }
 
 type createSiteRequest struct {
-	*domain.CreateSite
+	*site.CreateSite
 
 	StringID string `json:"id"`
 }

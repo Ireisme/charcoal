@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/ireisme/charcoal/pkg/events"
-	"github.com/ireisme/charcoal/services/sites/domain"
+	"github.com/ireisme/charcoal/services/sites/site"
 )
 
 type EventHandler interface {
@@ -26,9 +26,9 @@ func (handler *eventHandler) Handle() {
 }
 
 func (handler *eventHandler) siteCreated() {
-	event := domain.SiteCreated{}
+	event := site.SiteCreated{}
 	handler.receiver.Receieve("SiteCreated", &event, func(event interface{}) {
-		siteCreated := event.(*domain.SiteCreated)
+		siteCreated := event.(*site.SiteCreated)
 
 		fmt.Printf("Site was created! %s", siteCreated.Name)
 	})

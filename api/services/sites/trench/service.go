@@ -1,25 +1,26 @@
-package domain
+package trench
 
 import (
 	"fmt"
 
 	"github.com/google/uuid"
+	"github.com/ireisme/charcoal/services/sites/site"
 )
 
-//TrenchService for interacting with Trenches
-type TrenchService interface {
+//Service for interacting with Trenches
+type Service interface {
 	Find(id uuid.UUID) (*Trench, error)
 	FindBySite(siteID uuid.UUID) ([]*Trench, error)
 	Create(cmd CreateTrench) (*Trench, error)
 }
 
 type trenchService struct {
-	trenchRepo TrenchRepository
-	siteRepo   SiteRepository
+	trenchRepo Repository
+	siteRepo   site.Repository
 }
 
-//NewTrenchService creates a new TrenchService with dependencies
-func NewTrenchService(t TrenchRepository, s SiteRepository) TrenchService {
+//NewService creates a new Service with dependencies
+func NewService(t Repository, s site.Repository) Service {
 	return &trenchService{
 		trenchRepo: t,
 		siteRepo:   s,

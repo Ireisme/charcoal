@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/google/uuid"
-	"github.com/ireisme/charcoal/services/sites/domain"
+	"github.com/ireisme/charcoal/services/sites/site"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -13,14 +13,15 @@ type siteRepository struct {
 	db sqlx.DB
 }
 
-func NewSiteRepository(db sqlx.DB) domain.SiteRepository {
+//NewSiteRepository creates a new repository for Sites using CockroachDB
+func NewSiteRepository(db sqlx.DB) site.Repository {
 	return &siteRepository{
 		db: db,
 	}
 }
 
-func (r *siteRepository) Find(id uuid.UUID) (*domain.Site, error) {
-	site := domain.Site{}
+func (r *siteRepository) Find(id uuid.UUID) (*site.Site, error) {
+	site := site.Site{}
 
 	if err := r.db.Get(&site, "SELECT * FROM charcoal.sites WHERE id=$1", id); err != nil {
 		log.Fatal(err)
@@ -30,8 +31,8 @@ func (r *siteRepository) Find(id uuid.UUID) (*domain.Site, error) {
 	return &site, nil
 }
 
-func (r *siteRepository) FindAll() ([]*domain.Site, error) {
-	var sites []*domain.Site
+func (r *siteRepository) FindAll() ([]*site.Site, error) {
+	var sites []*site.Site
 
 	if err := r.db.Select(&sites, "SELECT * FROM charcoal.sites"); err != nil {
 		log.Fatal(err)
@@ -41,8 +42,8 @@ func (r *siteRepository) FindAll() ([]*domain.Site, error) {
 	return sites, nil
 }
 
-func (r *siteRepository) FindByName(name string) (*domain.Site, error) {
-	site := domain.Site{}
+func (r *siteRepository) FindByName(name string) (*site.Site, error) {
+	site := site.Site{}
 
 	if err := r.db.Get(&site, "SELECT * FROM charcoal.sites WHERE name=$1", name); err != nil {
 		if err == sql.ErrNoRows {
@@ -56,7 +57,7 @@ func (r *siteRepository) FindByName(name string) (*domain.Site, error) {
 	return &site, nil
 }
 
-func (r *siteRepository) Store(site *domain.Site) error {
+func (r *siteRepository) Store(site *site.Site) error {
 	if _, err := r.db.Exec("UPSERT INTO sites (id, name, imageUrl) VALUES ($1, $2, $3)", site.ID, site.Name, site.ImageURL); err != nil {
 		log.Fatal(err)
 		return err

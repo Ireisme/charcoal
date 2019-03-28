@@ -1,4 +1,4 @@
-package domain
+package site
 
 import (
 	"fmt"
@@ -7,35 +7,35 @@ import (
 	"github.com/ireisme/charcoal/pkg/events"
 )
 
-// SiteService for interacting with Sites
-type SiteService interface {
+//Service for interacting with Sites
+type Service interface {
 	Find(id uuid.UUID) (*Site, error)
 	FindAll() ([]*Site, error)
 	Create(cmd CreateSite) (*Site, error)
 }
 
-type siteService struct {
-	repo   SiteRepository
+type service struct {
+	repo   Repository
 	sender events.EventSender
 }
 
-//NewSiteService creates a new SiteService with dependencies
-func NewSiteService(repo SiteRepository, sender events.EventSender) SiteService {
-	return &siteService{
+//NewService creates a new Service with dependencies
+func NewService(repo Repository, sender events.EventSender) Service {
+	return &service{
 		repo:   repo,
 		sender: sender,
 	}
 }
 
-func (s *siteService) Find(id uuid.UUID) (*Site, error) {
+func (s *service) Find(id uuid.UUID) (*Site, error) {
 	return s.repo.Find(id)
 }
 
-func (s *siteService) FindAll() ([]*Site, error) {
+func (s *service) FindAll() ([]*Site, error) {
 	return s.repo.FindAll()
 }
 
-func (s *siteService) Create(cmd CreateSite) (*Site, error) {
+func (s *service) Create(cmd CreateSite) (*Site, error) {
 	if existingSite, err := s.repo.FindByName(cmd.Name); existingSite != nil {
 		return nil, fmt.Errorf("A site with the name '%s' already exists", cmd.Name)
 	} else if err != nil {

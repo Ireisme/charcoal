@@ -6,8 +6,9 @@ import (
 
 	"github.com/ireisme/charcoal/pkg/events/nats"
 	"github.com/ireisme/charcoal/services/sites/data/cockroach"
-	"github.com/ireisme/charcoal/services/sites/domain"
 	"github.com/ireisme/charcoal/services/sites/handlers"
+	"github.com/ireisme/charcoal/services/sites/site"
+	"github.com/ireisme/charcoal/services/sites/trench"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
@@ -26,8 +27,8 @@ func main() {
 	siteRepo := cockroach.NewSiteRepository(*db)
 	trenchRepo := cockroach.NewTrenchRepository(*db)
 
-	siteService := domain.NewSiteService(siteRepo, sender)
-	trenchService := domain.NewTrenchService(trenchRepo, siteRepo)
+	siteService := site.NewService(siteRepo, sender)
+	trenchService := trench.NewService(trenchRepo, siteRepo)
 
 	events := handlers.NewEventHandler(receiver)
 	events.Handle()

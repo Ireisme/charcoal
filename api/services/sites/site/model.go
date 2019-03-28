@@ -1,4 +1,4 @@
-package domain
+package site
 
 import (
 	"github.com/google/uuid"
@@ -26,11 +26,4 @@ func Create(cmd CreateSite) (Site, SiteCreated, error) {
 	}
 
 	return site, event, nil
-}
-
-//Trench domain model
-type Trench struct {
-	ID     uuid.UUID
-	SiteID uuid.UUID
-	Name   string
 }
