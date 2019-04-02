@@ -11,13 +11,11 @@ type Site struct {
 	ImageURL string
 }
 
-//Create to create new Site
-func Create(cmd CreateSite) (Site, SiteCreated, error) {
-	site := Site{
-		ID:       cmd.ID,
-		Name:     cmd.Name,
-		ImageURL: cmd.ImageURL,
-	}
+//Create populates a Site with data from the CreateSite command
+func (site *Site) Create(cmd CreateSite) (SiteCreated, error) {
+	site.ID = cmd.ID
+	site.Name = cmd.Name
+	site.ImageURL = cmd.ImageURL
 
 	event := SiteCreated{
 		ID:       cmd.ID,
@@ -25,5 +23,5 @@ func Create(cmd CreateSite) (Site, SiteCreated, error) {
 		ImageURL: cmd.ImageURL,
 	}
 
-	return site, event, nil
+	return event, nil
 }

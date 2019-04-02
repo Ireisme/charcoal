@@ -82,6 +82,42 @@ func TestStoreToReturnNewSite(t *testing.T) {
 	mockRepo.AssertExpectations(t)
 }
 
+func TestStoreToSendEvent(t *testing.T) {
+	id, _ := uuid.NewRandom()
+	createSite := site.CreateSite{
+		ID:       id,
+		Name:     "Test Name",
+		ImageURL: "http://fake.url.com",
+	}
+	siteCreated := site.SiteCreated{
+		ID:       createSite.ID,
+		Name:     createSite.Name,
+		ImageURL: createSite.ImageURL,
+	}
+
+	expected := &site.Site{
+		ID:       id,
+		Name:     createSite.Name,
+		ImageURL: createSite.ImageURL,
+	}
+
+	mockRepo := new(dmock.MockServiceRepository)
+	mockRepo.On("Store", expected).Return(nil)
+	mockRepo.On("FindByName", createSite.Name).Return(nil, nil)
+
+	mockSender := new(emock.MockSender)
+	mockSender.On("Send", "SiteCreated", siteCreated).Return(nil)
+
+	sut := site.NewService(mockRepo, mockSender)
+
+	actual, err := sut.Create(createSite)
+
+	assert.Nil(t, err)
+	assert.Equal(t, expected, actual)
+
+	mockSender.AssertExpectations(t)
+}
+
 func TestStoreToErrorWhenSiteNameExists(t *testing.T) {
 	existingID, _ := uuid.NewRandom()
 	existingSite := &site.Site{

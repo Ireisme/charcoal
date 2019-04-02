@@ -42,16 +42,18 @@ func (s *service) Create(cmd CreateSite) (*Site, error) {
 		return nil, err
 	}
 
-	site, event, err := Create(cmd)
+	site := &Site{}
+
+	event, err := site.Create(cmd)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := s.repo.Store(&site); err != nil {
+	if err := s.repo.Store(site); err != nil {
 		return nil, err
 	}
 
 	s.sender.Send("SiteCreated", event)
 
-	return &site, nil
+	return site, nil
 }
