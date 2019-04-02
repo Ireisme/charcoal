@@ -13,6 +13,12 @@ type MockSiteRepository struct {
 
 func (r *MockSiteRepository) Find(id uuid.UUID) (*site.Site, error) {
 	args := r.Called(id)
+
+	siteParam := args.Get(0)
+	if siteParam == nil {
+		return nil, args.Error(1)
+	}
+
 	return args.Get(0).(*site.Site), args.Error(1)
 }
 

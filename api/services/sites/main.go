@@ -28,7 +28,7 @@ func main() {
 	trenchRepo := cockroach.NewTrenchRepository(*db)
 
 	siteService := site.NewService(siteRepo, sender)
-	trenchService := trench.NewService(trenchRepo, siteRepo)
+	trenchService := trench.NewService(trenchRepo, siteRepo, sender)
 
 	events := handlers.NewEventHandler(receiver)
 	events.Handle()

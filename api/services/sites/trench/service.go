@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+	"github.com/ireisme/charcoal/pkg/events"
 	"github.com/ireisme/charcoal/services/sites/site"
 )
 
@@ -17,13 +18,15 @@ type Service interface {
 type trenchService struct {
 	trenchRepo Repository
 	siteRepo   site.Repository
+	sender     events.EventSender
 }
 
 //NewService creates a new Service with dependencies
-func NewService(t Repository, s site.Repository) Service {
+func NewService(trenchRepo Repository, siteRepo site.Repository, sender events.EventSender) Service {
 	return &trenchService{
-		trenchRepo: t,
-		siteRepo:   s,
+		trenchRepo: trenchRepo,
+		siteRepo:   siteRepo,
+		sender:     sender,
 	}
 }
 
@@ -52,15 +55,18 @@ func (s *trenchService) Create(cmd CreateTrench) (*Trench, error) {
 		return nil, err
 	}
 
-	trench := &Trench{
-		ID:     cmd.ID,
-		SiteID: cmd.SiteID,
-		Name:   cmd.Name,
+	trench := &Trench{}
+
+	event, err := trench.Create(cmd)
+	if err != nil {
+		return nil, err
 	}
 
 	if err := s.trenchRepo.Store(trench); err != nil {
 		return nil, err
 	}
+
+	s.sender.Send("TrenchCreated", event)
 
 	return trench, nil
 }
