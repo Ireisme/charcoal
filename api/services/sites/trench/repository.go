@@ -4,7 +4,7 @@ import (
 	"github.com/google/uuid"
 )
 
-//TrenchRepository for storing Trenches
+//Repository for storing Trenches
 type Repository interface {
 	Find(id uuid.UUID) (*Trench, error)
 	FindBySite(siteID uuid.UUID) ([]*Trench, error)
