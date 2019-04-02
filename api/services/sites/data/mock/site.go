@@ -7,21 +7,21 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-type MockServiceRepository struct {
+type MockSiteRepository struct {
 	mock.Mock
 }
 
-func (r *MockServiceRepository) Find(id uuid.UUID) (*site.Site, error) {
+func (r *MockSiteRepository) Find(id uuid.UUID) (*site.Site, error) {
 	args := r.Called(id)
 	return args.Get(0).(*site.Site), args.Error(1)
 }
 
-func (r *MockServiceRepository) FindAll() ([]*site.Site, error) {
+func (r *MockSiteRepository) FindAll() ([]*site.Site, error) {
 	args := r.Called()
 	return args.Get(0).([]*site.Site), args.Error(1)
 }
 
-func (r *MockServiceRepository) FindByName(name string) (*site.Site, error) {
+func (r *MockSiteRepository) FindByName(name string) (*site.Site, error) {
 	args := r.Called(name)
 	siteParam := args.Get(0)
 	if siteParam == nil {
@@ -31,12 +31,12 @@ func (r *MockServiceRepository) FindByName(name string) (*site.Site, error) {
 	return siteParam.(*site.Site), args.Error(1)
 }
 
-func (r *MockServiceRepository) Store(site *site.Site) error {
+func (r *MockSiteRepository) Store(site *site.Site) error {
 	args := r.Called(site)
 	return args.Error(0)
 }
 
-func (r *MockServiceRepository) Delete(id uuid.UUID) error {
+func (r *MockSiteRepository) Delete(id uuid.UUID) error {
 	args := r.Called(id)
 	return args.Error(0)
 }

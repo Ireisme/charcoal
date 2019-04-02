@@ -17,7 +17,7 @@ func TestFindToReturnSite(t *testing.T) {
 		ID: id,
 	}
 
-	mockRepo := new(dmock.MockServiceRepository)
+	mockRepo := new(dmock.MockSiteRepository)
 	mockRepo.On("Find", id).Return(expected, nil)
 
 	mockSender := new(emock.MockSender)
@@ -33,7 +33,7 @@ func TestFindToReturnSite(t *testing.T) {
 func TestFindAllToReturnSites(t *testing.T) {
 	expected := []*site.Site{&site.Site{}, &site.Site{}}
 
-	mockRepo := new(dmock.MockServiceRepository)
+	mockRepo := new(dmock.MockSiteRepository)
 	mockRepo.On("FindAll").Return(expected, nil)
 
 	mockSender := new(emock.MockSender)
@@ -65,7 +65,7 @@ func TestStoreToReturnNewSite(t *testing.T) {
 		ImageURL: createSite.ImageURL,
 	}
 
-	mockRepo := new(dmock.MockServiceRepository)
+	mockRepo := new(dmock.MockSiteRepository)
 	mockRepo.On("Store", expected).Return(nil)
 	mockRepo.On("FindByName", createSite.Name).Return(nil, nil)
 
@@ -101,7 +101,7 @@ func TestStoreToSendEvent(t *testing.T) {
 		ImageURL: createSite.ImageURL,
 	}
 
-	mockRepo := new(dmock.MockServiceRepository)
+	mockRepo := new(dmock.MockSiteRepository)
 	mockRepo.On("Store", expected).Return(nil)
 	mockRepo.On("FindByName", createSite.Name).Return(nil, nil)
 
@@ -132,7 +132,7 @@ func TestStoreToErrorWhenSiteNameExists(t *testing.T) {
 		ImageURL: "http://different.url.com",
 	}
 
-	mockRepo := new(dmock.MockServiceRepository)
+	mockRepo := new(dmock.MockSiteRepository)
 	mockRepo.On("FindByName", createSite.Name).Return(existingSite, nil)
 	mockRepo.On("Store", &site.Site{}).Return(nil)
 
