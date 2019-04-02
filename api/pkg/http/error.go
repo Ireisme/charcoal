@@ -20,7 +20,7 @@ func (e *ErrResponse) Render(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func ErrInternalServer(err error) render.Renderer {
+func ErrInternalServer(err error) *ErrResponse {
 	return &ErrResponse{
 		Err:            err,
 		HTTPStatusCode: 500,
@@ -29,7 +29,7 @@ func ErrInternalServer(err error) render.Renderer {
 	}
 }
 
-func ErrInvalidRequest(err error) render.Renderer {
+func ErrInvalidRequest(err error) *ErrResponse {
 	return &ErrResponse{
 		Err:            err,
 		HTTPStatusCode: 400,
