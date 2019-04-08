@@ -38,6 +38,10 @@ func (r *trenchRepository) FindBySite(siteID uuid.UUID) ([]*trench.Trench, error
 		return nil, err
 	}
 
+	if trenches == nil {
+		trenches = []*trench.Trench{}
+	}
+
 	return trenches, nil
 }
 
