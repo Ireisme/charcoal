@@ -34,7 +34,11 @@
       </v-container>
     </v-content>
     <v-footer color="indigo" app>
-      <span class="white--text">&copy; 2017</span>
+      <v-layout row wrap>
+        <v-flex text-xs-center white--text xs12>
+          &copy; {{ new Date().getFullYear() }}
+        </v-flex>
+      </v-layout>
     </v-footer>
   </div>
 </template>
