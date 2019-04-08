@@ -1,22 +1,21 @@
 import Vue from 'vue';
 import Vuex, { Store } from 'vuex';
-import sites, { SiteState } from './sites/site-store';
+import auth, { AuthState } from '../auth/auth-store'
+import sites, { SiteState } from '../sites/store/store';
+import trenches, { TrenchState } from '../trenches/store/store';
 
 Vue.use(Vuex);
 
-export interface AppState extends SiteState {
-  accessToken: string
+export interface AppState {
+  auth: AuthState
+  sites: SiteState
+  trenches: TrenchState
 }
 
 export default new Store<AppState>({
-  state: {
-    accessToken: '',
-    ...sites.initialState
-  },
-  mutations: {
-    ...sites.mutations
-  },
-  actions: {
-    ...sites.actions
+  modules: {
+    auth: auth.module,
+    sites: sites.module,
+    trenches: trenches.module
   }
 });

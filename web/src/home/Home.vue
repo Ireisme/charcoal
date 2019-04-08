@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { GetSitesAction } from '../store/sites/get-sites.action'
+import { GetSitesAction } from "../sites/store/action-types";
 
 @Component
 export default class Home extends Vue {

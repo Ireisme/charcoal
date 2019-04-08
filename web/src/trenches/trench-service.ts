@@ -1,9 +1,9 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import store from '../store/store'
 import { Guid } from "guid-typescript";
-import { Site } from './site';
+import { Trench } from './trench';
 
-export class SiteService {
+export class TrenchService {
   private baseUrl: string;
   private http: AxiosInstance;
 
@@ -19,13 +19,13 @@ export class SiteService {
     return request;
   }
 
-  public async getSites(): Promise<Site[]> {
-    const response = await this.http.get<Site[]>(`${this.baseUrl}/sites`);
+  public async getTrenchesBySite(siteId: Guid): Promise<Trench[]> {
+    const response = await this.http.get<Trench[]>(`${this.baseUrl}/sites/${siteId.toString()}/trenches/`);
     return response.data;
   }
 
-  public async addSite(site: Site) {
-    const response = await this.http.post<Site[]>(`${this.baseUrl}/sites`, { ID: site.ID.toString(), Name: site.Name, ImageURL: site.ImageURL });
+  public async addTrench(trench: Trench) {
+    const response = await this.http.post<Trench[]>(`${this.baseUrl}/sites/${trench.SiteID.toString()}/trenches/`, { ID: trench.ID.toString(), SiteID: trench.SiteID.toString(), Name: trench.Name });
     return response.data;
   }
 }
