@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/middleware"
@@ -113,7 +114,7 @@ func (h *siteHandler) createSite() chttp.HandleFn {
 type createSiteRequest struct {
 	*site.CreateSite
 
-	StringID string `json:"id"`
+	StringID string `json:"ID"`
 }
 
 func (s *createSiteRequest) Bind(r *http.Request) error {
@@ -185,8 +186,8 @@ func (h *siteHandler) createTrench() chttp.HandleFn {
 type createTrenchRequest struct {
 	*trench.CreateTrench
 
-	StringID     string `json:"id"`
-	StringSiteID string `json:"siteID"`
+	StringID     string `json:"ID"`
+	StringSiteID string `json:"SiteID"`
 }
 
 func (s *createTrenchRequest) Bind(r *http.Request) error {
@@ -201,7 +202,7 @@ func (s *createTrenchRequest) Bind(r *http.Request) error {
 
 	siteID, err := uuid.Parse(s.StringSiteID)
 	if err != nil {
-		siteID, _ = uuid.NewRandom()
+		return fmt.Errorf("invalid SiteID %s", s.StringSiteID)
 	}
 
 	s.CreateTrench.ID = id
