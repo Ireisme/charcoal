@@ -4,17 +4,7 @@
       <v-container fluid grid-list-md>
         <v-layout row wrap>
           <v-flex v-for="site in sites" :key="site.ID" xs-6>
-            <v-card hover style="min-width: 250px">
-              <v-img :src="site.ImageURL" height="200px">
-                <v-container fill-height fluid pa-2>
-                  <v-layout fill-height>
-                    <v-flex xs12 align-end flexbox>
-                      <span class="headline white--text site-name" v-text="site.Name"></span>
-                    </v-flex>
-                  </v-layout>
-                </v-container>
-              </v-img>
-            </v-card>
+            <site-item v-bind:site="site"></site-item>
           </v-flex>
         </v-layout>
       </v-container>
@@ -31,17 +21,24 @@
 .site-name {
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
+a {
+  text-decoration: none;
+}
 </style>
 
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { SiteService } from "./site-service";
-import { Site } from "./site";
+import { SiteService } from "../site-service";
+import { Site } from "../site";
+import SiteItem from "../components/SiteItem.vue";
 
-@Component
+@Component({
+  components: { SiteItem }
+})
 export default class SiteList extends Vue {
-
-  get sites () { return this.$store.state.sites; }
+  get sites() {
+    return this.$store.getters.listSites;
+  }
 }
 </script>

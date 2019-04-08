@@ -24,6 +24,11 @@ export class SiteService {
     return response.data;
   }
 
+  public async getSite(siteID: Guid): Promise<Site> {
+    const response = await this.http.get<Site>(`${this.baseUrl}/sites/${siteID.toJSON()}`);
+    return response.data;
+  }
+
   public async addSite(site: Site) {
     const response = await this.http.post<Site[]>(`${this.baseUrl}/sites`, { ID: site.ID.toString(), Name: site.Name, ImageURL: site.ImageURL });
     return response.data;

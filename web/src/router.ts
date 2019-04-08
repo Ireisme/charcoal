@@ -5,11 +5,11 @@ import Callback from './auth/Callback.vue'
 import Landing from './Landing.vue';
 
 import Home from './home/Home.vue';
-import DashBoard from './home/Dashboard.vue'
 import authService from './auth/auth.service';
 
-import SiteList from './sites/SiteList.vue'
-import AddSite from './sites/AddSite.vue';
+import SiteList from './sites/pages/SiteList.vue'
+import AddSite from './sites/pages/AddSite.vue';
+import ViewSite from './sites/pages/ViewSite/ViewSite.vue';
 
 Vue.use(Router);
 
@@ -45,6 +45,7 @@ export default new Router({
           });
         } catch (e) {
           console.log(e);
+          authService.login();
         }
       },
       children: [
@@ -54,6 +55,14 @@ export default new Router({
             name: 'site-list',
             component: SiteList
           },
+          ...withPrefix(':siteId', [
+            {
+              path: 'view',
+              name: 'view-site',
+              component: ViewSite,
+            },
+          ]),
+          { path: ':siteId', redirect: ':siteId/view' },
           {
             path: 'add',
             name: 'add-site',
