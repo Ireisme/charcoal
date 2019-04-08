@@ -23,7 +23,7 @@ func (r *trenchRepository) Find(id uuid.UUID) (*trench.Trench, error) {
 	trench := trench.Trench{}
 
 	if err := r.db.Get(&trench, "SELECT * FROM charcoal.trenches WHERE id=$1", id); err != nil {
-		log.Fatal(err)
+		log.Output(2, err.Error())
 		return nil, err
 	}
 
@@ -34,7 +34,7 @@ func (r *trenchRepository) FindBySite(siteID uuid.UUID) ([]*trench.Trench, error
 	var trenches []*trench.Trench
 
 	if err := r.db.Select(&trenches, "SELECT * FROM charcoal.trenches WHERE siteId=$1", siteID); err != nil {
-		log.Fatal(err)
+		log.Output(2, err.Error())
 		return nil, err
 	}
 
@@ -43,7 +43,7 @@ func (r *trenchRepository) FindBySite(siteID uuid.UUID) ([]*trench.Trench, error
 
 func (r *trenchRepository) Store(trench *trench.Trench) error {
 	if _, err := r.db.Exec("UPSERT INTO trenches (id, siteId, name) VALUES ($1, $2, $3)", trench.ID, trench.SiteID, trench.Name); err != nil {
-		log.Fatal(err)
+		log.Output(2, err.Error())
 		return err
 	}
 
@@ -52,7 +52,7 @@ func (r *trenchRepository) Store(trench *trench.Trench) error {
 
 func (r *trenchRepository) Delete(id uuid.UUID) error {
 	if _, err := r.db.Exec("DELETE FROM trenches WHERE id=$1)", id); err != nil {
-		log.Fatal(err)
+		log.Output(2, err.Error())
 		return err
 	}
 

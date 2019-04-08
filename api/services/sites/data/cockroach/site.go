@@ -24,7 +24,7 @@ func (r *siteRepository) Find(id uuid.UUID) (*site.Site, error) {
 	site := site.Site{}
 
 	if err := r.db.Get(&site, "SELECT * FROM charcoal.sites WHERE id=$1", id); err != nil {
-		log.Fatal(err)
+		log.Output(2, err.Error())
 		return nil, err
 	}
 
@@ -35,7 +35,7 @@ func (r *siteRepository) FindAll() ([]*site.Site, error) {
 	var sites []*site.Site
 
 	if err := r.db.Select(&sites, "SELECT * FROM charcoal.sites"); err != nil {
-		log.Fatal(err)
+		log.Output(2, err.Error())
 		return nil, err
 	}
 
@@ -50,7 +50,7 @@ func (r *siteRepository) FindByName(name string) (*site.Site, error) {
 			return nil, nil
 		}
 
-		log.Print(err)
+		log.Output(2, err.Error())
 		return nil, err
 	}
 
@@ -59,7 +59,7 @@ func (r *siteRepository) FindByName(name string) (*site.Site, error) {
 
 func (r *siteRepository) Store(site *site.Site) error {
 	if _, err := r.db.Exec("UPSERT INTO sites (id, name, imageUrl) VALUES ($1, $2, $3)", site.ID, site.Name, site.ImageURL); err != nil {
-		log.Fatal(err)
+		log.Output(2, err.Error())
 		return err
 	}
 
@@ -68,7 +68,7 @@ func (r *siteRepository) Store(site *site.Site) error {
 
 func (r *siteRepository) Delete(id uuid.UUID) error {
 	if _, err := r.db.Exec("DELETE FROM sites WHERE id=$1)", id); err != nil {
-		log.Fatal(err)
+		log.Output(2, err.Error())
 		return err
 	}
 
