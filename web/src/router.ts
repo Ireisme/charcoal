@@ -11,8 +11,9 @@ import SiteList from './sites/pages/SiteList.vue'
 import AddSite from './sites/pages/AddSite.vue';
 import ViewSite from './sites/pages/ViewSite/ViewSite.vue';
 
-Vue.use(Router);
+import AddTrench from './trenches/pages/AddTrench.vue'
 
+Vue.use(Router);
 
 const withPrefix = (prefix: string, routes: RouteConfig[]) =>
   routes.map((route) => {
@@ -61,6 +62,11 @@ export default new Router({
               name: 'view-site',
               component: ViewSite,
             },
+            {
+              path: 'trenches/add',
+              name: 'add-trench',
+              component: AddTrench
+            }
           ]),
           { path: ':siteId', redirect: ':siteId/view' },
           {
