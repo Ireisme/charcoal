@@ -16,11 +16,6 @@ const module: Module<AuthState, AppState> = {
     setAccessToken (state: AuthState, payload: { accessToken: string}) {
       state.accessToken = payload.accessToken;
     },
-  },
-  actions: {
-    doSomethingCrazy(context) {
-      console.log(context.state.accessToken)
-    }
   }
 };
 
