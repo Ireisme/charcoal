@@ -34,11 +34,11 @@ export default class AddSite extends Vue {
     this.$store.dispatch(
       new AddSiteAction(new Site(Guid.create(), name, imageUrl))
     );
-    this.$router.push("list");
+    this.$router.push('list');
   }
 
   back() {
-    this.$router.push("list");
+    this.$router.push('list');
   }
 }
 </script>

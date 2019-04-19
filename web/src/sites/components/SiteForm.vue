@@ -16,7 +16,7 @@
     ></v-text-field>
 
     <v-btn @click="submit">submit</v-btn>
-    <v-btn @click="back">cancel</v-btn>
+    <v-btn @click="cancel">cancel</v-btn>
   </form>
 </template>
 
@@ -48,14 +48,14 @@ export default class SiteForm extends Vue {
   nameErrors: string[] = [];
   imageUrlErrors: string[] = [];
 
-  async submit() {
+  submit() {
     if (!this.$v.$invalid) {
-    const onSubmit = this.$props["onSubmit"];
-    onSubmit(this.siteName, this.imageUrl);
+      const onSubmit = this.$props["onSubmit"];
+      onSubmit(this.siteName, this.imageUrl);
     }
   }
 
-  back() {
+  cancel() {
     const onCancel = this.$props["onCancel"];
     onCancel();
   }
@@ -65,7 +65,7 @@ export default class SiteForm extends Vue {
     const siteName: any = this.$v.siteName;
     siteName.$touch();
 
-    if (siteName.$dirty) !siteName.required && errors.push("Name is required.");
+    if (siteName.$dirty) !siteName.required && errors.push("Name is required");
 
     this.nameErrors = errors;
   }
@@ -75,7 +75,7 @@ export default class SiteForm extends Vue {
     const imageUrl: any = this.$v.imageUrl;
     imageUrl.$touch();
 
-    if (imageUrl.$dirty) !imageUrl.url && errors.push("Must be valid url");
+    if (imageUrl.$dirty) !imageUrl.url && errors.push("Must be a valid url");
 
     this.imageUrlErrors = errors;
   }

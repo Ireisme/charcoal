@@ -7,7 +7,9 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "test:watch": "vue-cli-service test:unit --watch",
+    "debug": "node --inspect-brk=9229 ./node_modules/@vue/cli-service/bin/vue-cli-service.js test:unit --runInBand"
   },
   "dependencies": {
     "@types/auth0-js": "^8.11.11",
@@ -54,6 +56,12 @@
     "not ie <= 8"
   ],
   "jest": {
+    "collectCoverage": true,
+    "coveragePathIgnorePatterns": [
+      "package.json",
+      "package-lock.json",
+      "coverage"
+    ],
     "moduleFileExtensions": [
       "js",
       "jsx",

@@ -34,3 +34,6 @@ export class SiteService {
     return response.data;
   }
 }
+
+const service = new SiteService();
+export default service;

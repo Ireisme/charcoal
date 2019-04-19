@@ -18,7 +18,7 @@
           </v-toolbar>
           <v-container fluid grid-list-sm>
             <v-layout row wrap>
-              <v-flex v-for="trench in trenches" :key="trench.ID" xs4>
+              <v-flex v-for="trench in trenches" :key="trench.ID.toString()" xs4>
                 <v-card style="height: 150px" text-center>
                   <v-container fill-height fluid pa-2>
                     <v-layout fill-height>

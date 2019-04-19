@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router, { RouteConfig } from 'vue-router';
 
-import Callback from './auth/Callback.vue'
+import Callback from './auth/callback/callback'
 import Landing from './Landing.vue';
 
 import Home from './home/Home.vue';

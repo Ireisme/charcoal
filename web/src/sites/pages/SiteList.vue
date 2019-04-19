@@ -3,7 +3,7 @@
     <v-flex xs12 sm8>
       <v-container fluid grid-list-md>
         <v-layout row wrap>
-          <v-flex v-for="site in sites" :key="site.ID" xs-6>
+          <v-flex v-for="site in sites" :key="site.ID.toString()" xs-6>
             <site-item v-bind:site="site"></site-item>
           </v-flex>
         </v-layout>

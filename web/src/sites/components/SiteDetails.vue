@@ -2,7 +2,7 @@
   <v-card>
     <v-toolbar color="pink" dark>
       <v-toolbar-side-icon></v-toolbar-side-icon>
-      <v-toolbar-title v-if="site">{{ site.Name }}</v-toolbar-title>
+      <v-toolbar-title v-if="site">Site</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon>
         <v-icon>create</v-icon>
