@@ -9,32 +9,20 @@
       "program": "${file}"
     },
     {
-      "type": "chrome",
-      "request": "launch",
-      "name": "vuejs: chrome",
-      "url": "http://localhost:8080",
-      "webRoot": "${workspaceFolder}/src",
-      "breakOnLoad": true,
-      "sourceMapPathOverrides": {
-        "webpack:///./src/*": "${webRoot}/*"
-      }
-    },
-    {
-      "type": "node",
-      "request": "attach",
-      "name": "Attach to Jest",
-      "port": 9229
-    },
-    {
-      "name": "Debug Jest Tests",
+      "name": "Debug CRA Tests",
       "type": "node",
       "request": "launch",
-      "port": 9229,
-      "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": [
-          "run-script", "debug"
-      ]
+      "runtimeExecutable": "${workspaceRoot}/charcoal/node_modules/.bin/react-scripts",
+      "args": [
+        "test",
+        "--runInBand",
+        "--no-cache",
+        "--watchAll=false"
+      ],
+      "cwd": "${workspaceRoot}/charcoal",
+      "protocol": "inspector",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
     }
   ]
 }
