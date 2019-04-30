@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Router, Route } from "react-router-dom";
 import './App.css';
 
+import history from './history';
+
 import Home from './home/Home';
-import Landing from './Landing';
+import Landing from './home/Landing';
+import Callback from './auth/Callback';
 
 class App extends Component {
   render() {
     return (
-      <Router>
+      <Router history={history}>
         <div>
-          <Route exact path="/" component={Landing} />
           <Route path="/home" component={Home} />
+          <Route path="/callback" component={Callback} />
+          <Route exact path="/" render={(props) => <Landing {...props}/>} />
         </div>
       </Router>
     );

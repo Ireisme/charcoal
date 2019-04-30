@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Home } from '../Home';
 import { Route } from 'react-router-dom';
-import Sites from '../../sites/Sites';
+import Sites from '../../sites/pages/Sites';
 import Header from '../Header';
 import Sidebar from '../Sidebar';
 

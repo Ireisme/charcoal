@@ -2,7 +2,7 @@ import React from 'react';
 import App from './App';
 import { shallow } from 'enzyme';
 import { Route } from 'react-router-dom';
-import Landing from './Landing';
+import Landing from './home/Landing';
 import Home from './home/Home';
 
 it('renders without crashing', () => {

@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import MenuIcon from '@material-ui/icons/Menu';
 import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { AppState } from '../store';
+import { logout } from '../auth/store/thunks';
+import { toggleDrawer } from './store/actions';
 
 const styles = {
   flex: {
@@ -19,15 +23,24 @@ export class Header extends Component<Props> {
           <Typography variant="h6" color="inherit" style={styles.flex} align="center">
             charcoal
             </Typography>
-          <Button color="inherit">Logout</Button>
+          <Button color="inherit" onClick={this.props.logout}>Logout</Button>
         </Toolbar>
       </AppBar>
     );
   }
 }
 
-interface Props {
-  onMenuClick: () => void
+interface DispatchProps {
+  onMenuClick: () => void;
+  logout: () => void;
 }
 
-export default Header;
+type Props = DispatchProps;
+
+export default connect<{}, DispatchProps, {}, AppState>(
+  null,
+  { 
+    onMenuClick: toggleDrawer,
+    logout: logout
+  }
+)(Header);
