@@ -35,5 +35,5 @@ func main() {
 
 	h := handlers.NewHTTPHandler(siteService, trenchService)
 
-	http.ListenAndServe(":3000", h.CreateHandler())
+	http.ListenAndServe(":5309", h.CreateHandler())
 }
