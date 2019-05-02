@@ -42,8 +42,8 @@ func (h *siteHandler) CreateHandler() http.Handler {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
-	r.Use(chttp.OauthMiddleware{}.Create().Handler)
 	r.Use(chttp.CorsMiddleware{}.Create().Handler)
+	r.Use(chttp.OauthMiddleware{}.Create().Handler)
 
 	r.Route("/sites", func(r chi.Router) {
 		r.Get("/", h.Handle(h.getAllSites))
