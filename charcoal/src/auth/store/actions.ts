@@ -1,7 +1,8 @@
 import { AuthSession } from "./state";
+import { LoginRequest, LoginSuccess, LoginFailure, RenewRequest, RenewSuccess, RenewFailure, LogoutRequest } from "./requests";
 
-export const SET_SESSION = <const> 'SET_SESSION';
-export const CLEAR_SESSION = <const> 'CLEAR_SESSON';
+export const SET_SESSION = <const>'SET_SESSION';
+export const CLEAR_SESSION = <const>'CLEAR_SESSON';
 
 export interface SetSessionAction {
   type: typeof SET_SESSION;
@@ -25,4 +26,13 @@ export function clearSession() {
   };
 }
 
-export type AuthActionTypes = SetSessionAction | ClearSessionAction;
+export type AuthActionTypes = 
+  SetSessionAction | 
+  ClearSessionAction | 
+  LoginRequest |
+  LoginSuccess |
+  LoginFailure |
+  RenewRequest |
+  RenewSuccess |
+  RenewFailure |
+  LogoutRequest;

@@ -1,5 +1,6 @@
 import { AuthState } from "./state";
 import { AuthActionTypes, SET_SESSION, CLEAR_SESSION } from "./actions";
+import { LOGIN_SUCCESS, LOGOUT_REQUEST, RENEW_SUCCESS } from "./requests";
 
 const initialState: AuthState = {
   session: null
@@ -7,12 +8,17 @@ const initialState: AuthState = {
 
 export function authReducer(state = initialState, action: AuthActionTypes): AuthState {
   switch (action.type) {
-    case SET_SESSION:
+    case LOGIN_SUCCESS:
       return {
         ...state,
         session: action.session
       };
-    case CLEAR_SESSION:
+    case RENEW_SUCCESS:
+      return {
+        ...state,
+        session: action.session
+      };
+    case LOGOUT_REQUEST:
       return {
         ...state,
         session: null

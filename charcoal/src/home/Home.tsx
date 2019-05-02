@@ -8,7 +8,7 @@ import { AppState } from '../store';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import { getDrawerOpen } from './store/selectors';
-import { getAllSites } from '../sites/store/thunks';
+import { getAllSitesRequest } from '../sites/store/requests';
 
 export class Home extends Component<Props> {
   componentDidMount() {
@@ -42,6 +42,6 @@ export default connect<StateProps, DispatchProps, {}, AppState>(
   (state: AppState) => ({ drawerOpen: getDrawerOpen(state) }),
   { 
     toggleSidebar: toggleDrawer,
-    getAllSites: getAllSites
+    getAllSites: getAllSitesRequest
   }
 )(Home);

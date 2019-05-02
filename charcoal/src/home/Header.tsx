@@ -3,8 +3,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { AppState } from '../store';
-import { logout } from '../auth/store/thunks';
 import { toggleDrawer } from './store/actions';
+import { logoutRequest } from '../auth/store/requests';
 
 const styles = {
   flex: {
@@ -41,6 +41,6 @@ export default connect<{}, DispatchProps, {}, AppState>(
   null,
   { 
     onMenuClick: toggleDrawer,
-    logout: logout
+    logout: logoutRequest
   }
 )(Header);

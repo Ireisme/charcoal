@@ -2,17 +2,27 @@ import React, { Component } from 'react';
 import loading from './loading.svg';
 import { connect } from 'react-redux';
 import { AppState } from '../store';
-import { decodeHash } from './store/thunks';
 import { RouteComponentProps } from 'react-router';
+import Auth from './auth';
+import { loginFailure, loginSuccess } from './store/requests';
+import { AuthSession } from './store/state';
 
 export class Callback extends Component<Props> {
 
   componentDidMount() {
     const { location, history } = this.props;
     if (/access_token|id_token|error/.test(location.hash)) {
-      this.props.decodeHash().then(() => {
-        history.push('/home');
-      });
+      const auth = new Auth();
+      auth.decodeHash().then(
+        session => {
+          this.props.hashDecoded(session);
+          history.push('/home');
+        },
+        error => {
+          this.props.hashDecodingFailure(error);
+          history.push('/landing');
+        }
+      );
     }
   }
 
@@ -32,19 +42,23 @@ export class Callback extends Component<Props> {
 
     return (
       <div style={style}>
-        <img src={loading} alt="loading"/>
+        <img src={loading} alt="loading" />
       </div>
     );
   }
 }
 
 interface DispatchProps {
-  decodeHash: () => any;
+  hashDecoded: (session: AuthSession) => any;
+  hashDecodingFailure: (error: Error) => any;
 }
 
 type Props = DispatchProps & RouteComponentProps;
 
 export default connect<{}, DispatchProps, {}, AppState>(
   null,
-  { decodeHash: decodeHash }
+  {
+    hashDecoded: loginSuccess,
+    hashDecodingFailure: loginFailure
+  }
 )(Callback);

@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { Button } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { AppState } from '../store';
-import { login } from '../auth/store/thunks';
+import { loginRequest } from '../auth/store/requests';
 
 const backgroundStyle = {
   position: 'fixed' as 'fixed',
@@ -43,5 +43,5 @@ type Props = DispatchProps;
 
 export default connect<{}, DispatchProps, {}, AppState>(
   null,
-  { login: login }
+  { login: loginRequest }
 )(Landing);

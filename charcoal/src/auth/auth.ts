@@ -34,14 +34,16 @@ export default class Auth {
 
   renewSession = (): Promise<AuthSession> => {
     return new Promise((resolve, reject) => {
-      this.auth0.checkSession({}, (err, authResult) => {
+      this.auth0.checkSession({
+        responseType: 'token id_token'
+      }, (err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
           resolve(this.toAuthSession(authResult));
         } else if (err) {
           this.logout();
           reject(err.error);
         }
-     });
+      });
     });
   };
 

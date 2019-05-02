@@ -75,3 +75,15 @@ export function renewFailure(error: Error): RenewFailure {
     error: error
   };
 }
+
+export const LOGOUT_REQUEST = <const>'LOGOUT_REQUEST';
+
+export interface LogoutRequest {
+  type: typeof LOGOUT_REQUEST;
+}
+
+export function logoutRequest(): LogoutRequest {
+  return {
+    type: LOGOUT_REQUEST
+  };
+}

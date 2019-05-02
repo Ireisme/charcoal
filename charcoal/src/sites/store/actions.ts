@@ -1,4 +1,5 @@
 import { Site } from "../site";
+import { GetAllSitesRequest, GetAllSitesSuccess, GetAllSitesFailure } from "./requests";
 
 export const ADD_SITE = <const> 'ADD_SITE';
 
@@ -14,4 +15,8 @@ export function addSite(site: Site) {
   };
 }
 
-export type SitesActionTypes = AddSiteAction;
+export type SitesActionTypes = 
+  AddSiteAction |
+  GetAllSitesRequest |
+  GetAllSitesSuccess |
+  GetAllSitesFailure;
