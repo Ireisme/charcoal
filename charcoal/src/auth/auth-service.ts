@@ -1,9 +1,8 @@
-import history from '../history';
 import auth0, { Auth0DecodedHash } from 'auth0-js';
 import { AUTH_CONFIG } from './auth-config';
 import { AuthSession } from './store/state';
 
-export default class Auth {
+export default class AuthService {
 
   auth0 = new auth0.WebAuth({
     domain: AUTH_CONFIG.domain,
@@ -54,7 +53,7 @@ export default class Auth {
   };
 
   toAuthSession = (authResult: Auth0DecodedHash): AuthSession => {
-    const expiresAt = authResult.expiresIn ? (authResult.expiresIn * 1000) + new Date().getTime() : 0;
+    const expiresAt = authResult.expiresIn ? (authResult.expiresIn * 1000) + Date.now() : 0;
     return {
       idToken: authResult.idToken || '',
       accessToken: authResult.accessToken || '',

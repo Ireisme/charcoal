@@ -1,5 +1,5 @@
 import { AuthState } from "./state";
-import { AuthActionTypes, SET_SESSION, CLEAR_SESSION } from "./actions";
+import { AuthActionTypes } from "./actions";
 import { LOGIN_SUCCESS, LOGOUT_REQUEST, RENEW_SUCCESS } from "./requests";
 
 const initialState: AuthState = {

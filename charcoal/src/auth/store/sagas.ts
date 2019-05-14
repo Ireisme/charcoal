@@ -1,25 +1,24 @@
-import { call, put, takeLatest, take, race, delay, all, takeEvery } from 'redux-saga/effects'
-import Auth from '../auth';
-import { renewRequest, RENEW_SUCCESS, RENEW_FAILURE, logoutRequest, renewSuccess, renewFailure, LOGIN_REQUEST, LOGOUT_REQUEST, RENEW_REQUEST, LOGIN_SUCCESS } from './requests';
-import { SetSessionAction, SET_SESSION } from './actions';
+import { call, put, takeLatest, take, race, takeEvery } from 'redux-saga/effects'
+import Auth from '../auth-service';
+import { renewRequest, RENEW_SUCCESS, RENEW_FAILURE, logoutRequest, renewSuccess, renewFailure, LOGIN_REQUEST, LOGOUT_REQUEST, RENEW_REQUEST, LOGIN_SUCCESS, LoginSuccess, RenewSuccess } from './requests';
 import Axios from 'axios';
 
 const auth = new Auth();
 
-function* login() {
+export function* login() {
   yield call(auth.login);
 };
 
-function* renew() {
+export function* renew() {
   try {
     const session = yield call(auth.renewSession);
     yield put(renewSuccess(session));
-  } catch(error) {
+  } catch (error) {
     yield put(renewFailure(error));
   }
 }
 
-function* logout() {
+export function* logout() {
   yield call(auth.logout);
 }
 
@@ -45,35 +44,30 @@ function getFailType(action: Action) {
   return `${identifyAction(action)}_FAILURE`
 }
 
-function* monitor(monitoredAction: Action) {
-  console.log('started monitoring', monitoredAction.type)
+export function* monitor(monitoredAction: Action) {
   const { fail } = yield race({
     success: take(getSuccessType(monitoredAction)),
     fail: take(getFailType(monitoredAction)),
   });
 
   if (fail && fail.error && fail.error.response && fail.error.response.status === 401) {
-    console.log('detected 401, refreshing token')
-    yield put(renewRequest())
+    console.log('401 response trying to renew token')
+    yield put(renewRequest());
 
     const { success } = yield race({
       success: take(RENEW_SUCCESS),
       fail: take(RENEW_FAILURE),
-    })
+    });
 
     if (success) {
-      console.log('token refreshed, retrying', monitoredAction.type)
-      yield put(monitoredAction)
+      yield put(monitoredAction);
     } else {
-      console.log('token refresh failed, logging out user')
-      yield put(logoutRequest())
+      yield put(logoutRequest());
     }
   }
-
-  console.log('monitoring', monitoredAction.type, 'finished')
 }
 
-function* setAxiosHeader(action: SetSessionAction) {
+export function* setAxiosHeader(action: LoginSuccess | RenewSuccess) {
   yield Axios.defaults.headers = {
     Authorization: `Bearer ${action.session.accessToken}`
   };

@@ -11,5 +11,5 @@ describe('getDrawerOpen', () => {
     const returned = getDrawerOpen(state);
 
     expect(returned).toStrictEqual(true);
-  })
+  });
 });

@@ -3,7 +3,7 @@ import loading from './loading.svg';
 import { connect } from 'react-redux';
 import { AppState } from '../store';
 import { RouteComponentProps } from 'react-router';
-import Auth from './auth';
+import Auth from './auth-service';
 import { loginFailure, loginSuccess } from './store/requests';
 import { AuthSession } from './store/state';
 
